@@ -1,0 +1,6 @@
+@API.BanhTrungThu_HostAddress = http://localhost:5177
+
+GET {{API.BanhTrungThu_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
