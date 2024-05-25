@@ -30,8 +30,25 @@ namespace API.BanhTrungThu.Controllers
                     MaAnh = anhSanPham.MaAnh,
                     MaSanPham = anhSanPham.MaSanPham,
                     TenAnh = anhSanPham.TenAnh,
-                    NgayThem = anhSanPham.NgayThem,
-                    TenSanPham = anhSanPham.SanPham.TenSanPham
+                });
+            }
+            return Ok(response);
+        }
+
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<IActionResult> GetSanPhamById(string id)
+        {
+            var anhSanPhams = await _anhSanPhamRepositories.GetAnhSanPhamById(id);
+            var response = new List<AnhSanPhamDto>();
+            foreach (var anhSanPham in anhSanPhams)
+            {
+
+                response.Add(new AnhSanPhamDto
+                {
+                    MaAnh = anhSanPham.MaAnh,
+                    MaSanPham = anhSanPham.MaSanPham,
+                    TenAnh = anhSanPham.TenAnh,
                 });
             }
             return Ok(response);

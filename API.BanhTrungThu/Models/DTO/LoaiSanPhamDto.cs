@@ -6,6 +6,6 @@ namespace API.BanhTrungThu.Models.DTO
     {
         public string MaLoai { get; set; }
         public string TenLoai { get; set; }
-        public double KhoiLuong { get; set; }
+        public string AnhLoai { get; set; }
     }
 }

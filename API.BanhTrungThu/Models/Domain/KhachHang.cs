@@ -7,15 +7,22 @@ namespace API.BanhTrungThu.Models.Domain
         [Key]
         [StringLength(6)]
         public string MaKhachHang { get; set; }
+
         [StringLength(70)]
         public string TenKhachHang { get; set; }
+
         [StringLength(11)]
         public string SoDienThoai { get; set; }
-        [StringLength(100)]
+
+        [Required]
+        [StringLength(80)]
         public string Email { get; set; }
-        [StringLength(4)]
-        public string GioiTinh { get; set; }
-        [StringLength(200)]
+
+        [StringLength(255)]
         public string DiaChi { get; set; }
+
+        [StringLength(50)]
+        public string TinhTrang { get; set; }
+ 
     }
 }

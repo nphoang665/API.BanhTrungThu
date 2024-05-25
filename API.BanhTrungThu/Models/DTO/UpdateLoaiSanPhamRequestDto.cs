@@ -3,6 +3,6 @@
     public class UpdateLoaiSanPhamRequestDto
     {
         public string TenLoai { get; set; }
-        public double KhoiLuong { get; set; }
+        public string AnhLoai { get; set; }
     }
 }

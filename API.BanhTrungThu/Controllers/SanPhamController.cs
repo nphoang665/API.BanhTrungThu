@@ -1,5 +1,6 @@
 ﻿using API.BanhTrungThu.Models.Domain;
 using API.BanhTrungThu.Models.DTO;
+using API.BanhTrungThu.Repositories.Implementation;
 using API.BanhTrungThu.Repositories.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -33,8 +34,7 @@ namespace API.BanhTrungThu.Controllers
                 Gia = request.Gia,
                 MoTa = request.MoTa,
                 SoLuongTrongKho = request.SoLuongTrongKho,
-                NgayHetHan = request.NgayHetHan,
-                NgayNhap = DateTime.Now,
+                NgayThem = DateTime.Now,
                 TinhTrang = "Đang hoạt động"
             };
 
@@ -48,11 +48,10 @@ namespace API.BanhTrungThu.Controllers
                 Gia = sanPham.Gia,
                 MoTa = sanPham.MoTa,
                 SoLuongTrongKho = sanPham.SoLuongTrongKho,
-                NgayHetHan = sanPham.NgayHetHan,
-                NgayNhap = sanPham.NgayNhap,
+                NgayThem = sanPham.NgayThem,
                 TinhTrang = sanPham.TinhTrang
             };
-            if (request.AnhSanPham != null)
+            if (request.ImgSelected != null)
             {
                 // Tạo thư mục 'uploads' nếu nó chưa tồn tại
                 string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "Images");
@@ -61,10 +60,10 @@ namespace API.BanhTrungThu.Controllers
                     Directory.CreateDirectory(folderPath);
                 }
 
-                for (int i = 0; i < request.AnhSanPham.Length; i++)
+                for (int i = 0; i < request.ImgSelected.Length; i++)
                 {
                     // Tách chuỗi Base64 và loại media
-                    var parts = request.AnhSanPham[i].Split(',');
+                    var parts = request.ImgSelected[i].Split(',');
                     string mediaType = parts[0]; // Ví dụ: "data:image/jpeg;base64"
                     string base64 = parts[1];
 
@@ -87,7 +86,6 @@ namespace API.BanhTrungThu.Controllers
                     {
                         MaSanPham = maSanPham,
                         TenAnh = fileName,
-                        NgayThem = DateTime.Now
                     };
                     await _anhSanPhamRepositories.UploadImg(anhSanPham);
                 }
@@ -113,8 +111,7 @@ namespace API.BanhTrungThu.Controllers
                     Gia = sanPham.Gia,
                     MoTa = sanPham.MoTa,
                     SoLuongTrongKho = sanPham.SoLuongTrongKho,
-                    NgayHetHan = sanPham.NgayHetHan,
-                    NgayNhap = sanPham.NgayNhap,
+                    NgayThem = sanPham.NgayThem,
                     TinhTrang = sanPham.TinhTrang,
                     AnhSanPham = anhSanPham,
                 });
@@ -140,9 +137,8 @@ namespace API.BanhTrungThu.Controllers
                 Gia = sanPham.Gia,
                 MoTa = sanPham.MoTa,
                 SoLuongTrongKho = sanPham.SoLuongTrongKho,
-                NgayHetHan = sanPham.NgayHetHan,
-                NgayNhap = sanPham.NgayNhap,
                 TinhTrang = sanPham.TinhTrang,
+                NgayThem = sanPham.NgayThem,
                 AnhSanPham = anhSanPham,            
             };
             return Ok(response);
@@ -159,8 +155,7 @@ namespace API.BanhTrungThu.Controllers
                 Gia= request.Gia,
                 MoTa = request.MoTa,
                 SoLuongTrongKho = request.SoLuongTrongKho,
-                NgayHetHan = request.NgayHetHan,
-                NgayNhap= request.NgayNhap,
+                NgayThem = request.NgayThem,
                 TinhTrang= request.TinhTrang,
             };
             sanPham = await _sanPhamRepositories.UpdateAsync(sanPham);
@@ -181,7 +176,7 @@ namespace API.BanhTrungThu.Controllers
             if (request.AnhSanPhamBrowse != null)
             {
                 // Tạo thư mục 'uploads' nếu nó chưa tồn tại
-                string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "uploads");
+                string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "Images");
                 if (!Directory.Exists(folderPath))
                 {
                     Directory.CreateDirectory(folderPath);
@@ -213,7 +208,6 @@ namespace API.BanhTrungThu.Controllers
                     {
                         MaSanPham = sanPham.MaSanPham,
                         TenAnh = fileName,
-                        NgayThem = DateTime.Now
                     };
                     await _anhSanPhamRepositories.UploadImg(anhSanPham);
                 }
@@ -226,11 +220,47 @@ namespace API.BanhTrungThu.Controllers
                 Gia = sanPham.Gia,
                 MoTa = sanPham.MoTa,
                 SoLuongTrongKho = sanPham.SoLuongTrongKho,
-                NgayHetHan = sanPham.NgayHetHan,
-                NgayNhap = sanPham.NgayNhap,
                 TinhTrang = sanPham.TinhTrang,
             };
             return Ok(response);
         }
+
+        [HttpGet("Loai/{maLoai}")]
+        public async Task<ActionResult<IEnumerable<SanPham>>> GetSanPhamByLoaiAsync(string maLoai)
+        {
+            var sanPhams = await _sanPhamRepositories.GetSanPhamByLoaiAsync(maLoai);
+            if (sanPhams == null)
+            {
+                return NotFound();
+            }
+            // Lọc chỉ lấy sản phẩm đầu tiên của mỗi loại sản phẩm
+            var firstSanPhams = sanPhams.GroupBy(sp => sp.MaLoai).Select(group => group.First());
+            return Ok(sanPhams);
+
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<IActionResult> DeleteLoaiSanPham([FromRoute] string id)
+        {
+            var sanPham = await _sanPhamRepositories.DeleteAsync(id);
+            if (sanPham == null)
+            {
+                return NotFound();
+            }
+            var response = new SanPhamDto
+            {
+                MaSanPham = sanPham.MaSanPham,
+                MaLoai = sanPham.MaLoai,
+                TenSanPham = sanPham.TenSanPham,
+                Gia = sanPham.Gia,
+                MoTa = sanPham.MoTa,
+                SoLuongTrongKho = sanPham.SoLuongTrongKho,
+                TinhTrang = sanPham.TinhTrang,
+                NgayThem = sanPham.NgayThem,
+            };
+            return Ok(response);
+        }
+
     }
 }

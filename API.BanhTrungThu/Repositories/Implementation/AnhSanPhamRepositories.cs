@@ -28,7 +28,7 @@ namespace API.BanhTrungThu.Repositories.Implementation
 
         public async Task<IEnumerable<AnhSanPham>> GetAnhSanPhamById(string id)
         {
-            return await _db.AnhSanPham.Where(x => x.MaSanPham == id).ToListAsync();
+            return await _db.AnhSanPham.Include(s=>s.SanPham).Where(x => x.MaSanPham == id).ToListAsync();
         }
 
         public async Task<SanPham> GetSanPhamById(string idSanPham)
@@ -39,7 +39,7 @@ namespace API.BanhTrungThu.Repositories.Implementation
         public string RemoveImgByName(string AnhSanPham)
         {
             //cắt chuỗi loại bỏ phần string localhost
-            string convertImgTour = AnhSanPham.Substring(31);
+            string convertImgTour = AnhSanPham.Substring(30);
             //tìm kiếm ảnh trong db ANH_TOUR
             var imgTour = _db.AnhSanPham.Where(s => s.TenAnh == convertImgTour);
             //nếu ảnh tour có trong db

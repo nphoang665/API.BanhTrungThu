@@ -35,17 +35,10 @@ namespace API.BanhTrungThu.Migrations
                         .HasMaxLength(6)
                         .HasColumnType("nvarchar(6)");
 
-                    b.Property<DateTime>("NgayThem")
-                        .HasColumnType("Date");
-
                     b.Property<string>("TenAnh")
                         .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("MaAnh");
 
@@ -85,18 +78,60 @@ namespace API.BanhTrungThu.Migrations
                     b.ToTable("ChiTietDonHang");
                 });
 
-            modelBuilder.Entity("API.BanhTrungThu.Models.Domain.DonHang", b =>
+            modelBuilder.Entity("API.BanhTrungThu.Models.Domain.DanhGia", b =>
                 {
-                    b.Property<string>("MaDonHang")
-                        .HasMaxLength(6)
-                        .HasColumnType("nvarchar(6)");
+                    b.Property<int>("MaDanhGia")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MaDanhGia"));
+
+                    b.Property<string>("BinhLuan")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("DiemDanhGia")
+                        .HasColumnType("int");
 
                     b.Property<string>("MaKhachHang")
                         .IsRequired()
                         .HasMaxLength(6)
                         .HasColumnType("nvarchar(6)");
 
-                    b.Property<DateTime>("ThoiGianDatHang")
+                    b.Property<string>("MaSanPham")
+                        .IsRequired()
+                        .HasMaxLength(6)
+                        .HasColumnType("nvarchar(6)");
+
+                    b.Property<DateTime>("NgayDanhGia")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("MaDanhGia");
+
+                    b.HasIndex("MaKhachHang");
+
+                    b.HasIndex("MaSanPham");
+
+                    b.ToTable("DanhGia");
+                });
+
+            modelBuilder.Entity("API.BanhTrungThu.Models.Domain.DonHang", b =>
+                {
+                    b.Property<string>("MaDonHang")
+                        .HasMaxLength(6)
+                        .HasColumnType("nvarchar(6)");
+
+                    b.Property<string>("DiaChiGiaoHang")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("MaKhachHang")
+                        .IsRequired()
+                        .HasMaxLength(6)
+                        .HasColumnType("nvarchar(6)");
+
+                    b.Property<DateTime?>("ThoiGianDatHang")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ThongTinThanhToan")
@@ -127,18 +162,13 @@ namespace API.BanhTrungThu.Migrations
 
                     b.Property<string>("DiaChi")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("GioiTinh")
-                        .IsRequired()
-                        .HasMaxLength(4)
-                        .HasColumnType("nvarchar(4)");
+                        .HasMaxLength(80)
+                        .HasColumnType("nvarchar(80)");
 
                     b.Property<string>("SoDienThoai")
                         .IsRequired()
@@ -149,6 +179,11 @@ namespace API.BanhTrungThu.Migrations
                         .IsRequired()
                         .HasMaxLength(70)
                         .HasColumnType("nvarchar(70)");
+
+                    b.Property<string>("TinhTrang")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("MaKhachHang");
 
@@ -161,8 +196,9 @@ namespace API.BanhTrungThu.Migrations
                         .HasMaxLength(6)
                         .HasColumnType("nvarchar(6)");
 
-                    b.Property<double>("KhoiLuong")
-                        .HasColumnType("float");
+                    b.Property<string>("AnhLoai")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TenLoai")
                         .IsRequired()
@@ -172,30 +208,6 @@ namespace API.BanhTrungThu.Migrations
                     b.HasKey("MaLoai");
 
                     b.ToTable("LoaiSanPham");
-                });
-
-            modelBuilder.Entity("API.BanhTrungThu.Models.Domain.PhieuNhapHang", b =>
-                {
-                    b.Property<string>("MaPhieu")
-                        .HasMaxLength(6)
-                        .HasColumnType("nvarchar(6)");
-
-                    b.Property<string>("MaSanPham")
-                        .IsRequired()
-                        .HasMaxLength(6)
-                        .HasColumnType("nvarchar(6)");
-
-                    b.Property<DateTime>("NgayNhap")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("SoLuong")
-                        .HasColumnType("int");
-
-                    b.HasKey("MaPhieu");
-
-                    b.HasIndex("MaSanPham");
-
-                    b.ToTable("PhieuNhapHang");
                 });
 
             modelBuilder.Entity("API.BanhTrungThu.Models.Domain.SanPham", b =>
@@ -214,13 +226,9 @@ namespace API.BanhTrungThu.Migrations
 
                     b.Property<string>("MoTa")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("NgayHetHan")
-                        .HasColumnType("Date");
-
-                    b.Property<DateTime>("NgayNhap")
+                    b.Property<DateTime?>("NgayThem")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("SoLuongTrongKho")
@@ -273,6 +281,25 @@ namespace API.BanhTrungThu.Migrations
                     b.Navigation("SanPham");
                 });
 
+            modelBuilder.Entity("API.BanhTrungThu.Models.Domain.DanhGia", b =>
+                {
+                    b.HasOne("API.BanhTrungThu.Models.Domain.KhachHang", "KhachHang")
+                        .WithMany()
+                        .HasForeignKey("MaKhachHang")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.BanhTrungThu.Models.Domain.SanPham", "SanPham")
+                        .WithMany()
+                        .HasForeignKey("MaSanPham")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("KhachHang");
+
+                    b.Navigation("SanPham");
+                });
+
             modelBuilder.Entity("API.BanhTrungThu.Models.Domain.DonHang", b =>
                 {
                     b.HasOne("API.BanhTrungThu.Models.Domain.KhachHang", "KhachHang")
@@ -282,17 +309,6 @@ namespace API.BanhTrungThu.Migrations
                         .IsRequired();
 
                     b.Navigation("KhachHang");
-                });
-
-            modelBuilder.Entity("API.BanhTrungThu.Models.Domain.PhieuNhapHang", b =>
-                {
-                    b.HasOne("API.BanhTrungThu.Models.Domain.SanPham", "SanPham")
-                        .WithMany()
-                        .HasForeignKey("MaSanPham")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("SanPham");
                 });
 
             modelBuilder.Entity("API.BanhTrungThu.Models.Domain.SanPham", b =>

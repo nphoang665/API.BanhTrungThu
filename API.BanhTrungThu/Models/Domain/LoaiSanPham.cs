@@ -10,6 +10,6 @@ namespace API.BanhTrungThu.Models.Domain
         public string MaLoai { get; set; }
         [StringLength(70)]
         public string TenLoai { get; set; }
-        public double KhoiLuong { get; set; }
+        public string AnhLoai { get; set; }
     }
 }

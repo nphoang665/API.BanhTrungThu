@@ -13,9 +13,5 @@ namespace API.BanhTrungThu.Models.Domain
         public SanPham SanPham { get; set; }
         [StringLength(100)]
         public string TenAnh { get; set; }
-        [StringLength(100)]
-        [Column(TypeName = "Date")]
-        public DateTime NgayThem { get; set; }
-
     }
 }

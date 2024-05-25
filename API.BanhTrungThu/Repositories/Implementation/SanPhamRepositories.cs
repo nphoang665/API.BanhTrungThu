@@ -44,9 +44,14 @@ namespace API.BanhTrungThu.Repositories.Implementation
             return await _db.SanPham.FirstOrDefaultAsync(x => x.MaSanPham == id);
         }
 
+        public async Task<IEnumerable<SanPham>> GetSanPhamByLoaiAsync(string maLoai)
+        {
+            return await _db.SanPham.Where(sp => sp.MaLoai == maLoai).ToListAsync();
+        }
+
         public async Task<SanPham?> UpdateAsync(SanPham sanPham)
         {
-            var existingSanPham = await _db.SanPham.Include(x => x.MaLoai).FirstOrDefaultAsync(x => x.MaSanPham == sanPham.MaSanPham);
+            var existingSanPham = await _db.SanPham.FirstOrDefaultAsync(x => x.MaSanPham == sanPham.MaSanPham);
             if (existingSanPham == null)
             {
                 return null;

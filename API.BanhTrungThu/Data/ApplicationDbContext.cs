@@ -14,6 +14,6 @@ namespace API.BanhTrungThu.Data
         public DbSet<KhachHang> KhachHang { get;set; }
         public DbSet<DonHang> DonHang { get;set; }
         public DbSet<ChiTietDonHang> ChiTietDonHang { get;set; }
-        public DbSet<PhieuNhapHang>PhieuNhapHang {  get;set; } 
+        public DbSet<DanhGia>DanhGia {  get;set; } 
     }
 }

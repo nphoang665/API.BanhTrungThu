@@ -11,9 +11,8 @@ namespace API.BanhTrungThu.Models.DTO
         public double Gia { get; set; }
         public string MoTa { get; set; }
         public int SoLuongTrongKho { get; set; }
-        public DateTime NgayHetHan { get; set; }
-        public DateTime NgayNhap { get; set; }
+        public DateTime NgayThem { get; set; }
         public string TinhTrang { get; set; }
-        public string[] AnhSanPham { get; set; }
+        public string[] ImgSelected { get; set; }
     }
 }

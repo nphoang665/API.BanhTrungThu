@@ -1,5 +1,6 @@
 ﻿using API.BanhTrungThu.Models.Domain;
 using API.BanhTrungThu.Models.DTO;
+using API.BanhTrungThu.Repositories.Implementation;
 using API.BanhTrungThu.Repositories.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -27,15 +28,47 @@ namespace API.BanhTrungThu.Controllers
             {
                 MaLoai = MaLoai,
                 TenLoai = request.TenLoai,
-                KhoiLuong = request.KhoiLuong,
+                AnhLoai = request.AnhLoai,
             };
             await _loaiSanPhamRepositories.CreateAsync(loaiSanPham);
 
+            if (!string.IsNullOrEmpty(request.AnhLoai))
+            {
+                string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "Images");
+                if (!Directory.Exists(folderPath))
+                {
+                    Directory.CreateDirectory(folderPath);
+                }
+
+                // Tách chuỗi Base64 và loại media
+                var parts = request.AnhLoai.Split(',');
+                string mediaType = parts[0];
+                string base64 = parts[1];
+
+                // Chuyển đổi chuỗi Base64 thành mảng byte
+                byte[] imageBytes = Convert.FromBase64String(base64);
+
+                // Xác định định dạng file từ loại media
+                var format = mediaType.Split(';')[0].Split('/')[1];
+
+                // Tạo tên file duy nhất cho hình ảnh
+                string fileName = $"{MaLoai}_{DateTime.Now.Ticks}.{format}";
+
+                // Tạo đường dẫn đầy đủ cho file
+                string filePath = Path.Combine(folderPath, fileName);
+
+                // Ghi mảng byte vào file
+                System.IO.File.WriteAllBytes(filePath, imageBytes);
+
+                // Cập nhật tên file vào đối tượng loaiSanPham và lưu lại vào cơ sở dữ liệu
+                loaiSanPham.AnhLoai = fileName;
+                await _loaiSanPhamRepositories.UpdateAsync(loaiSanPham);
+            }
             var response = new LoaiSanPhamDto
             {
                 MaLoai = loaiSanPham.MaLoai,
                 TenLoai = loaiSanPham.TenLoai,
-                KhoiLuong = loaiSanPham.KhoiLuong
+                AnhLoai = loaiSanPham.AnhLoai
             };
             return Ok(response);
         }
@@ -52,7 +85,7 @@ namespace API.BanhTrungThu.Controllers
                 {
                     MaLoai = loaiSanPham.MaLoai,
                     TenLoai = loaiSanPham.TenLoai,
-                    KhoiLuong = loaiSanPham.KhoiLuong
+                    AnhLoai = loaiSanPham.AnhLoai
                 });
             }
             return Ok(response);
@@ -71,7 +104,7 @@ namespace API.BanhTrungThu.Controllers
             {
                 MaLoai = existingLoaiSanPham.MaLoai,
                 TenLoai = existingLoaiSanPham.TenLoai,
-                KhoiLuong = existingLoaiSanPham.KhoiLuong
+                AnhLoai = existingLoaiSanPham.AnhLoai
             };
             return Ok(response);
         }
@@ -84,7 +117,7 @@ namespace API.BanhTrungThu.Controllers
             {
                 MaLoai = id,
                 TenLoai = request.TenLoai,
-                KhoiLuong = request.KhoiLuong
+                AnhLoai = request.AnhLoai
             };
             loaiSanPham = await _loaiSanPhamRepositories.UpdateAsync(loaiSanPham);
 
@@ -92,11 +125,44 @@ namespace API.BanhTrungThu.Controllers
             {
                 return NotFound();
             }
+
+            if (!string.IsNullOrEmpty(request.AnhLoai))
+            {
+                string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "Images");
+                if (!Directory.Exists(folderPath))
+                {
+                    Directory.CreateDirectory(folderPath);
+                }
+
+                // Tách chuỗi Base64 và loại media
+                var parts = request.AnhLoai.Split(',');
+                string mediaType = parts[0];
+                string base64 = parts[1];
+
+                // Chuyển đổi chuỗi Base64 thành mảng byte
+                byte[] imageBytes = Convert.FromBase64String(base64);
+
+                // Xác định định dạng file từ loại media
+                var format = mediaType.Split(';')[0].Split('/')[1];
+
+                // Tạo tên file duy nhất cho hình ảnh
+                string fileName = $"{id}_{DateTime.Now.Ticks}.{format}";
+
+                // Tạo đường dẫn đầy đủ cho file
+                string filePath = Path.Combine(folderPath, fileName);
+
+                // Ghi mảng byte vào file
+                System.IO.File.WriteAllBytes(filePath, imageBytes);
+
+                // Cập nhật tên file vào đối tượng loaiSanPham và lưu lại vào cơ sở dữ liệu
+                loaiSanPham.AnhLoai = fileName;
+                await _loaiSanPhamRepositories.UpdateAsync(loaiSanPham);
+            }
             var response = new LoaiSanPhamDto
             {
                 MaLoai = loaiSanPham.MaLoai,
                 TenLoai = loaiSanPham.TenLoai,
-                KhoiLuong = loaiSanPham.KhoiLuong
+                AnhLoai = loaiSanPham.AnhLoai
             };
             return Ok(response);
         }
@@ -114,7 +180,7 @@ namespace API.BanhTrungThu.Controllers
             {
                 MaLoai = loaiSanPham.MaLoai,
                 TenLoai = loaiSanPham.TenLoai,
-                KhoiLuong = loaiSanPham.KhoiLuong
+                AnhLoai = loaiSanPham.AnhLoai
             };
             return Ok(response);
         }

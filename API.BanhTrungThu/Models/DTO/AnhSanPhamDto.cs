@@ -9,7 +9,5 @@ namespace API.BanhTrungThu.Models.DTO
         public int MaAnh { get; set; }
         public string MaSanPham { get; set; }
         public string TenAnh { get; set; }
-        public DateTime NgayThem { get; set; }
-        public string TenSanPham { get; set; }
     }
 }
