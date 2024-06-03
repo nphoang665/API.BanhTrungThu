@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace API.BanhTrungThu.Models.Domain
 {
@@ -23,6 +24,8 @@ namespace API.BanhTrungThu.Models.Domain
 
         [StringLength(50)]
         public string TinhTrang { get; set; }
- 
+        [Column(TypeName = "Date")]
+        public DateTime NgayDangKy { get; set; }
+
     }
 }

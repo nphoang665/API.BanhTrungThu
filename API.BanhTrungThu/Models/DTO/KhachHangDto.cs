@@ -10,5 +10,6 @@ namespace API.BanhTrungThu.Models.DTO
         public string Email { get; set; }
         public string DiaChi { get; set; }
         public string TinhTrang { get; set; }
+        public DateTime NgayDangKy { get; set; }
     }
 }

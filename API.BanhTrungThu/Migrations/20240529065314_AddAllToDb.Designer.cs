@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.BanhTrungThu.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240522055323_AddAllToDb")]
+    [Migration("20240529065314_AddAllToDb")]
     partial class AddAllToDb
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace API.BanhTrungThu.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.4")
+                .HasAnnotation("ProductVersion", "8.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -172,6 +172,9 @@ namespace API.BanhTrungThu.Migrations
                         .IsRequired()
                         .HasMaxLength(80)
                         .HasColumnType("nvarchar(80)");
+
+                    b.Property<DateTime>("NgayDangKy")
+                        .HasColumnType("Date");
 
                     b.Property<string>("SoDienThoai")
                         .IsRequired()

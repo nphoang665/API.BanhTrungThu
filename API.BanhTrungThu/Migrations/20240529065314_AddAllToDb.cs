@@ -20,7 +20,8 @@ namespace API.BanhTrungThu.Migrations
                     SoDienThoai = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(80)", maxLength: 80, nullable: false),
                     DiaChi = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    TinhTrang = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                    TinhTrang = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    NgayDangKy = table.Column<DateTime>(type: "Date", nullable: false)
                 },
                 constraints: table =>
                 {

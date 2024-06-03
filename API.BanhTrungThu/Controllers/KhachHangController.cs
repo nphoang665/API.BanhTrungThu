@@ -31,6 +31,7 @@ namespace API.BanhTrungThu.Controllers
                 Email = request.Email,
                 DiaChi = request.DiaChi,
                 TinhTrang = "Đang hoạt động",
+                NgayDangKy = DateTime.Now,
             };
 
             await _khachHangRepositories.CreateAsync(khachHang);
@@ -42,7 +43,8 @@ namespace API.BanhTrungThu.Controllers
                 SoDienThoai = khachHang.SoDienThoai,
                 Email = khachHang.Email,
                 DiaChi = khachHang.DiaChi,
-                TinhTrang = khachHang.TinhTrang
+                TinhTrang = khachHang.TinhTrang,
+                NgayDangKy = khachHang.NgayDangKy,
             };
             return Ok(response);
         }
@@ -61,7 +63,8 @@ namespace API.BanhTrungThu.Controllers
                     SoDienThoai = khachHang.SoDienThoai,
                     Email = khachHang.Email,
                     DiaChi = khachHang.DiaChi,
-                    TinhTrang = khachHang.TinhTrang
+                    TinhTrang = khachHang.TinhTrang,
+                    NgayDangKy = khachHang.NgayDangKy,
                 });
             }
             return Ok(response);
@@ -83,7 +86,8 @@ namespace API.BanhTrungThu.Controllers
                 SoDienThoai = khachHang.SoDienThoai,
                 Email = khachHang.Email,
                 DiaChi = khachHang.DiaChi,
-                TinhTrang = khachHang.TinhTrang
+                TinhTrang = khachHang.TinhTrang,
+                NgayDangKy = khachHang.NgayDangKy,
             };
             return Ok(response);
         }
@@ -99,7 +103,8 @@ namespace API.BanhTrungThu.Controllers
                 SoDienThoai = request.SoDienThoai,
                 Email = request.Email,
                 DiaChi = request.DiaChi,
-                TinhTrang = request.TinhTrang
+                TinhTrang = request.TinhTrang,
+                NgayDangKy = request.NgayDangKy,
             };
             if(khachHang == null)
             {
@@ -113,7 +118,8 @@ namespace API.BanhTrungThu.Controllers
                 SoDienThoai = khachHang.SoDienThoai,
                 Email = khachHang.Email,
                 DiaChi = khachHang.DiaChi,
-                TinhTrang = khachHang.TinhTrang
+                TinhTrang = khachHang.TinhTrang,
+                NgayDangKy = khachHang.NgayDangKy,
             };
             return Ok(response);
         }

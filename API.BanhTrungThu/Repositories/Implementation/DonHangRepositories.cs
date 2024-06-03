@@ -43,6 +43,11 @@ namespace API.BanhTrungThu.Repositories.Implementation
             return await _db.DonHang.FirstOrDefaultAsync(x => x.MaDonHang == id);
         }
 
+        public async Task<SanPham> GetSanPhamById(string id)
+        {
+            return await _db.SanPham.FindAsync(id);
+        }
+
         public async Task<DonHang?> UpdateAsync(DonHang donHang)
         {
             var existingDonHang = await _db.DonHang.FirstOrDefaultAsync(x => x.MaDonHang == donHang.MaDonHang);
@@ -53,6 +58,12 @@ namespace API.BanhTrungThu.Repositories.Implementation
             _db.Entry(existingDonHang).CurrentValues.SetValues(donHang);
             await _db.SaveChangesAsync();
             return donHang;
+        }
+
+        public async Task UpdateSanPhamAsync(SanPham sanPham)
+        {
+            _db.SanPham.Update(sanPham);
+            await _db.SaveChangesAsync();
         }
     }
 }
