@@ -13,5 +13,6 @@ namespace API.BanhTrungThu.Models.DTO
         public string DiaChiGiaoHang { get; set; }
         public string ThongTinThanhToan { get; set; }
         public string TinhTrang { get; set; }
+        public string PaymentUrl { get; set; }
     }
 }
