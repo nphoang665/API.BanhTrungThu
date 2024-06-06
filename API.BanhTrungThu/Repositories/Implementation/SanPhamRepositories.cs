@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.BanhTrungThu.Repositories.Implementation
 {
-    public class SanPhamRepositories:ISanPhamRepositories
+    public class SanPhamRepositories : ISanPhamRepositories
     {
         private readonly ApplicationDbContext _db;
 
@@ -47,6 +47,20 @@ namespace API.BanhTrungThu.Repositories.Implementation
         public async Task<IEnumerable<SanPham>> GetSanPhamByLoaiAsync(string maLoai)
         {
             return await _db.SanPham.Where(sp => sp.MaLoai == maLoai).ToListAsync();
+        }
+
+        public async Task<IEnumerable<SanPham>> GetSanPhamNoiBatAsync()
+        {
+            // Giả sử bạn có bảng OrderDetails chứa thông tin chi tiết các đơn hàng
+            var sanPhams = await(from od in _db.ChiTietDonHang
+                                 group od by od.MaSanPham into grouped
+                                 orderby grouped.Count() descending
+                                 select grouped.Key)
+                                 .Take(10) // Giới hạn số sản phẩm nổi bật cần lấy
+                                 .Join(_db.SanPham, id => id, sp => sp.MaSanPham, (id, sp) => sp)
+                                 .ToListAsync();
+
+            return sanPhams;
         }
 
         public async Task<SanPham?> UpdateAsync(SanPham sanPham)

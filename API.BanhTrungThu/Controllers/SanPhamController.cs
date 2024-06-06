@@ -125,7 +125,7 @@ namespace API.BanhTrungThu.Controllers
         {
             var sanPham = await _sanPhamRepositories.GetSanPhamById(id);
             var anhSanPham = await _anhSanPhamRepositories.GetAnhSanPhamById(id);
-            if(sanPham == null)
+            if (sanPham == null)
             {
                 return NotFound();
             }
@@ -139,7 +139,7 @@ namespace API.BanhTrungThu.Controllers
                 SoLuongTrongKho = sanPham.SoLuongTrongKho,
                 TinhTrang = sanPham.TinhTrang,
                 NgayThem = sanPham.NgayThem,
-                AnhSanPham = anhSanPham,            
+                AnhSanPham = anhSanPham,
             };
             return Ok(response);
         }
@@ -152,15 +152,15 @@ namespace API.BanhTrungThu.Controllers
                 MaSanPham = id,
                 MaLoai = request.MaLoai,
                 TenSanPham = request.TenSanPham,
-                Gia= request.Gia,
+                Gia = request.Gia,
                 MoTa = request.MoTa,
                 SoLuongTrongKho = request.SoLuongTrongKho,
                 NgayThem = request.NgayThem,
-                TinhTrang= request.TinhTrang,
+                TinhTrang = request.TinhTrang,
             };
             sanPham = await _sanPhamRepositories.UpdateAsync(sanPham);
 
-            if(sanPham == null)
+            if (sanPham == null)
             {
                 return NotFound();
             }
@@ -262,5 +262,29 @@ namespace API.BanhTrungThu.Controllers
             return Ok(response);
         }
 
+        [HttpGet("noibat")]
+        public async Task<IActionResult> GetSanPhamNoiBat()
+        {
+            var sanPhams = await _sanPhamRepositories.GetSanPhamNoiBatAsync();
+
+            var response = new List<SanPhamDto>();
+            foreach (var sanPham in sanPhams)
+            {
+                var anhSanPham = await _anhSanPhamRepositories.GetAnhSanPhamById(sanPham.MaSanPham);
+                response.Add(new SanPhamDto
+                {
+                    MaSanPham = sanPham.MaSanPham,
+                    MaLoai = sanPham.MaLoai,
+                    TenSanPham = sanPham.TenSanPham,
+                    Gia = sanPham.Gia,
+                    MoTa = sanPham.MoTa,
+                    SoLuongTrongKho = sanPham.SoLuongTrongKho,
+                    NgayThem = sanPham.NgayThem,
+                    TinhTrang = sanPham.TinhTrang,
+                    AnhSanPham = anhSanPham,
+                });
+            }
+            return Ok(response);
+        }
     }
 }

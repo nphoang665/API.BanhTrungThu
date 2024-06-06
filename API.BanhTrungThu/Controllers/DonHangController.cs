@@ -205,6 +205,39 @@ namespace API.BanhTrungThu.Controllers
             };
             return Ok(response);
         }
+        [HttpGet]
+        [Route("lich-su-mua-hang/{maKhachHang}")]
+        public async Task<IActionResult> GetLichSuMuaHang(string maKhachHang)
+        {
+            var donHangs = await _donHangRepositories.GetLichSuMuaHangByKhachHang(maKhachHang);
+
+            var response = new List<DonHangDto>();
+            foreach (var donHang in donHangs)
+            {
+                var chiTietDonHangs = await _donHangRepositories.GetChiTietDonHangByMaDonHang(donHang.MaDonHang);
+                response.Add(new DonHangDto
+                {
+                    MaDonHang = donHang.MaDonHang,
+                    MaKhachHang = donHang.MaKhachHang,
+                    ThoiGianDatHang = donHang.ThoiGianDatHang,
+                    TongTien = donHang.TongTien,
+                    ThongTinThanhToan = donHang.ThongTinThanhToan,
+                    DiaChiGiaoHang = donHang.DiaChiGiaoHang,
+                    TinhTrang = donHang.TinhTrang,
+                    ChiTietDonHang = chiTietDonHangs.Select(chiTiet => new ChiTietDonHangDto
+                    {
+                        MaChiTiet = chiTiet.MaChiTiet,
+                        MaDonHang = chiTiet.MaDonHang,
+                        MaSanPham = chiTiet.MaSanPham,
+                        SoLuong = chiTiet.SoLuong,
+                        Gia = chiTiet.Gia,
+                        TenSanPham = chiTiet.SanPham.TenSanPham // Thêm dòng này
+                    }).ToList()
+                });
+            }
+            return Ok(response);
+        }
+
     }
 }
 

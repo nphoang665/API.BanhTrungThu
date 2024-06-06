@@ -10,5 +10,6 @@ namespace API.BanhTrungThu.Repositories.Interface
         Task<SanPham?> DeleteAsync(string id);
         Task<SanPham?> GetSanPhamById(string id);
         Task<IEnumerable<SanPham>> GetSanPhamByLoaiAsync(string maLoai);
+        Task<IEnumerable<SanPham>> GetSanPhamNoiBatAsync();
     }
 }

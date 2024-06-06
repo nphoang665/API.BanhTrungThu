@@ -14,5 +14,6 @@ namespace API.BanhTrungThu.Models.DTO
         public string ThongTinThanhToan { get; set; }
         public string TinhTrang { get; set; }
         public string PaymentUrl { get; set; }
+        public List<ChiTietDonHangDto> ChiTietDonHang { get; set; }
     }
 }

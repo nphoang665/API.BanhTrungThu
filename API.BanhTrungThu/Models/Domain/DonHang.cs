@@ -21,5 +21,6 @@ namespace API.BanhTrungThu.Models.Domain
 
         [StringLength(50)]
         public string TinhTrang { get; set; }
+        public ICollection<ChiTietDonHang> ChiTietDonHang { get; set; }
     }
 }

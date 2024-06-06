@@ -11,5 +11,6 @@ namespace API.BanhTrungThu.Models.DTO
         public string MaSanPham { get; set; }
         public int SoLuong { get; set; }
         public double Gia { get; set; }
+        public string TenSanPham { get; set; }
     }
 }

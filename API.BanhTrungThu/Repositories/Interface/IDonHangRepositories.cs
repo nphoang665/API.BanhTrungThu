@@ -9,7 +9,10 @@ namespace API.BanhTrungThu.Repositories.Interface
         Task<DonHang?> GetDonHangById(string id);
         Task<DonHang?> UpdateAsync(DonHang donHang);
         Task<DonHang?> DeleteAsync(string id);
-        Task<SanPham> GetSanPhamById(string id); // Thêm phương thức này
-        Task UpdateSanPhamAsync(SanPham sanPham); // Thêm phương thức này
+        Task<SanPham> GetSanPhamById(string id);
+        Task UpdateSanPhamAsync(SanPham sanPham); 
+        Task<IEnumerable<DonHang>> GetDonHangByKhachHang(string maKhachHang);
+        Task<IEnumerable<DonHang>> GetLichSuMuaHangByKhachHang(string maKhachHang); // Thêm dòng này
+        Task<IEnumerable<ChiTietDonHang>> GetChiTietDonHangByMaDonHang(string maDonHang); // Thêm dòng này
     }
 }

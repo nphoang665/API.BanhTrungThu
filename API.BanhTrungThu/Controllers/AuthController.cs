@@ -32,7 +32,7 @@ namespace API.BanhTrungThu.Controllers
         private readonly ISanPhamRepositories _sanPhamRepositories;
         private readonly IKhachHangRepositories _khachHangRepositories;
 
-        public AuthController(UserManager<IdentityUser> userManager, IKhachHangRepositories khachHangRepositories, ITokenRepository tokenReponsitory,IDonHangRepositories donHangRepositories,IChiTietDonHangRepositories chiTietDonHangRepositories,ISanPhamRepositories sanPhamRepositories)
+        public AuthController(UserManager<IdentityUser> userManager, IKhachHangRepositories khachHangRepositories, ITokenRepository tokenReponsitory, IDonHangRepositories donHangRepositories, IChiTietDonHangRepositories chiTietDonHangRepositories, ISanPhamRepositories sanPhamRepositories)
         {
             this.userManager = userManager;
             _khachHangRepositories = khachHangRepositories;
@@ -474,7 +474,7 @@ namespace API.BanhTrungThu.Controllers
         }
         async Task<string> XuLyHoaDonThanhToan(string htmlContent, string idThanhToan)
         {
-            //lấy thanh toán
+            // Lấy đơn hàng
             var donHang = await _donHangRepositories.GetDonHangById(idThanhToan);
             if (donHang == null)
             {
@@ -491,9 +491,10 @@ namespace API.BanhTrungThu.Controllers
                 DiaChiGiaoHang = donHang.DiaChiGiaoHang,
                 TinhTrang = donHang.TinhTrang
             };
-            htmlContent = htmlContent.Replace("{{MaHoaDon}}", responseThanhToan.MaDonHang);
-            htmlContent = htmlContent.Replace("{{NgayTaoHoaDon}}", responseThanhToan.ThoiGianDatHang.ToString());
 
+            htmlContent = htmlContent.Replace("{{MaHoaDon}}", responseThanhToan.MaDonHang);
+            DateTime thoiGianDatHang = DateTime.Parse(responseThanhToan.ThoiGianDatHang.ToString());
+            htmlContent = htmlContent.Replace("{{NgayTaoHoaDon}}", thoiGianDatHang.ToString("dd/MM/yyyy hh:mm"));
 
             var khachHang = await _khachHangRepositories.GetKhachHangById(responseThanhToan.MaKhachHang);
             var responseKhachHang = new KhachHangDto
@@ -507,15 +508,14 @@ namespace API.BanhTrungThu.Controllers
                 NgayDangKy = khachHang.NgayDangKy,
             };
 
-            //gán thông tin nhân viên và khách hàng
-            htmlContent = htmlContent.Replace("{{TenKhachHangThanhToan}}", responseKhachHang.TenKhachHang);
-            htmlContent = htmlContent.Replace("{{SoDienThoaiKhachHangThanhToan}}", responseKhachHang.SoDienThoai);
-            htmlContent = htmlContent.Replace("{{EmailKhachHangThanhToan}}", responseKhachHang.Email);
-            
+            // Gán thông tin khách hàng
+            htmlContent = htmlContent.Replace("{{TenKhachHang}}", responseKhachHang.TenKhachHang);
+            htmlContent = htmlContent.Replace("{{SoDienThoai}}", responseKhachHang.SoDienThoai);
+            htmlContent = htmlContent.Replace("{{Email}}", responseKhachHang.Email);
+            htmlContent = htmlContent.Replace("{{DiaChi}}", responseKhachHang.DiaChi);
 
-            //lấy dịch vụ
+            // Lấy chi tiết đơn hàng
             var chiTietDonHangs = await _chiTietDonHangRepositories.GetAllAsync();
-
             var responseChiTietDonHang = new List<ChiTietDonHangDto>();
             foreach (var chiTietDonHang in chiTietDonHangs)
             {
@@ -526,48 +526,50 @@ namespace API.BanhTrungThu.Controllers
                     MaSanPham = chiTietDonHang.MaSanPham,
                     SoLuong = chiTietDonHang.SoLuong,
                     Gia = chiTietDonHang.Gia,
-
                 });
             }
+
             if (responseChiTietDonHang.Count > 0)
             {
                 var responseChiTietDonHangDuocDat = responseChiTietDonHang.Where(s => s.MaDonHang == responseThanhToan.MaDonHang).ToList();
-                int startTrIndex = htmlContent.IndexOf("<tr class=\"item tr_item_DichVu\">");
-                int endTrIndex = htmlContent.IndexOf("</tr>", startTrIndex) + 5; // +5 để bao gồm cả thẻ </tr>
-                string trContent = htmlContent.Substring(startTrIndex, endTrIndex - startTrIndex);
-                // Biến để lưu nội dung HTML cuối cùng
-                StringBuilder finalHtmlContent = new StringBuilder();
 
-                // Lặp qua từng mục trong danh sách
-                foreach (var item in responseChiTietDonHangDuocDat)
+                int startTrIndex = htmlContent.IndexOf("<tr class=\"tr_item_SanPham\">");
+                if (startTrIndex != -1)
                 {
-                    // Sao chép nội dung HTML gốc
-                    string itemHtmlContent = string.Copy(trContent);
-                    var sanPhamss = _sanPhamRepositories.GetSanPhamById(item.MaSanPham);
-                    // Thay thế các placeholder trong HTML với dữ liệu thực tế
-                    itemHtmlContent = itemHtmlContent.Replace("{{TenDichVu}}", item.MaSanPham);
-                    itemHtmlContent = itemHtmlContent.Replace("{{SoLuongDichVu}}", item.SoLuong.ToString());
-                    itemHtmlContent = itemHtmlContent.Replace("{{DonGiaDichVu}}", item.Gia.ToString());
-                    //itemHtmlContent = itemHtmlContent.Replace("{{ThoiGianDichVu}}", item.ThoiGianDichVu.ToString());
+                    int endTrIndex = htmlContent.IndexOf("</tr>", startTrIndex) + 5; // +5 để bao gồm cả thẻ </tr>
+                    string trContent = htmlContent.Substring(startTrIndex, endTrIndex - startTrIndex);
 
+                    // Biến để lưu nội dung HTML cuối cùng
+                    StringBuilder finalHtmlContent = new StringBuilder();
 
+                    int stt = 1;
+                    // Lặp qua từng mục trong danh sách
+                    foreach (var item in responseChiTietDonHangDuocDat)
+                    {
+                        // Sao chép nội dung HTML gốc
+                        string itemHtmlContent = string.Copy(trContent);
+                        var sanPham = await _sanPhamRepositories.GetSanPhamById(item.MaSanPham);
 
-                    finalHtmlContent.Append(itemHtmlContent);
+                        // Thay thế các placeholder trong HTML với dữ liệu thực tế
+                        itemHtmlContent = itemHtmlContent.Replace("{{STT}}", stt.ToString());
+                        itemHtmlContent = itemHtmlContent.Replace("{{TenSanPham}}", sanPham.TenSanPham);
+                        itemHtmlContent = itemHtmlContent.Replace("{{SoLuong}}", item.SoLuong.ToString());
+                        itemHtmlContent = itemHtmlContent.Replace("{{DonGia}}", item.Gia.ToString("N0"));
+                        itemHtmlContent = itemHtmlContent.Replace("{{ThanhTien}}", (item.SoLuong * item.Gia).ToString("N0"));
+
+                        finalHtmlContent.Append(itemHtmlContent);
+                        stt++;
+                    }
+
+                    htmlContent = htmlContent.Replace(trContent, finalHtmlContent.ToString());
                 }
 
-                //htmlContent = htmlContent.Replace("{{TongTienTour}}", responseThanhToan.TongTien.ToString());
-                //htmlContent = htmlContent.Replace("{{TongTienDichVu}}", responseThanhToan.TongTienDichVu.ToString());
-                htmlContent = htmlContent.Replace("{{TongCong}}", responseThanhToan.TongTien.ToString());
-
-                htmlContent = htmlContent.Replace(trContent, finalHtmlContent.ToString());
+                htmlContent = htmlContent.Replace("{{TongTien}}", responseThanhToan.TongTien.ToString("N0"));
             }
-
-
-
-
 
             return htmlContent;
         }
+
 
     }
 }
