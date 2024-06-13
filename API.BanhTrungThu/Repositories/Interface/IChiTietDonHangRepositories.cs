@@ -9,5 +9,6 @@ namespace API.BanhTrungThu.Repositories.Interface
         Task<IEnumerable<ChiTietDonHang?>> GetDonHangById(string id);
         Task<ChiTietDonHang?> UpdateAsync(ChiTietDonHang chiTietDonHang);
         Task<ChiTietDonHang?> DeleteAsync(string id);
+        Task<IEnumerable<ChiTietDonHang>> GetChiTietDonHangByDonHangId(string maDonHang);
     }
 }

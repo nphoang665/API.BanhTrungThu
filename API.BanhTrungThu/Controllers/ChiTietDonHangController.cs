@@ -11,10 +11,12 @@ namespace API.BanhTrungThu.Controllers
     public class ChiTietDonHangController : ControllerBase
     {
         private readonly IChiTietDonHangRepositories _chiTietDonHangRepositories;
+        private readonly ISanPhamRepositories _sanPhamRepositories;
 
-        public ChiTietDonHangController(IChiTietDonHangRepositories chiTietDonHangRepositories)
+        public ChiTietDonHangController(IChiTietDonHangRepositories chiTietDonHangRepositories,ISanPhamRepositories sanPhamRepositories)
         {
             _chiTietDonHangRepositories = chiTietDonHangRepositories;
+            _sanPhamRepositories = sanPhamRepositories;
         }
 
         [HttpGet]
@@ -43,6 +45,7 @@ namespace API.BanhTrungThu.Controllers
             Random random = new Random();
             int randomValue = random.Next(1000);
             string id = "CTH" + randomValue.ToString("D3");
+            var sanPhams = await _sanPhamRepositories.GetSanPhamById(request.MaSanPham);
 
             var donHang = new ChiTietDonHang
             {
@@ -50,10 +53,11 @@ namespace API.BanhTrungThu.Controllers
                 MaDonHang = request.MaDonHang,
                 MaSanPham = request.MaSanPham,
                 SoLuong = request.SoLuong,
-                Gia = request.Gia,
+                Gia = request.Gia, 
             };
-
             donHang = await _chiTietDonHangRepositories.CreateAsync(donHang);
+            sanPhams.SoLuongTrongKho -= donHang.SoLuong;
+            sanPhams = await _sanPhamRepositories.UpdateAsync(sanPhams);
 
             var response = new ChiTietDonHangDto
             {
@@ -63,6 +67,9 @@ namespace API.BanhTrungThu.Controllers
                 SoLuong = donHang.SoLuong,
                 Gia = donHang.Gia,
             };
+
+            
+
             return Ok(response);
         }
 
@@ -87,6 +94,17 @@ namespace API.BanhTrungThu.Controllers
                 });
             }
             return Ok(response);
+        }
+
+        [HttpGet("donhang/{maDonHang}")]
+        public async Task<IActionResult> GetChiTietDonHangByDonHangId(string maDonHang)
+        {
+            var chiTietDonHangs = await _chiTietDonHangRepositories.GetChiTietDonHangByDonHangId(maDonHang);
+            if (chiTietDonHangs == null || !chiTietDonHangs.Any())
+            {
+                return NotFound();
+            }
+            return Ok(chiTietDonHangs);
         }
 
     }

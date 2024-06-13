@@ -1,6 +1,7 @@
 ﻿using API.BanhTrungThu.Models.Domain;
 using API.BanhTrungThu.Models.DTO;
 using API.BanhTrungThu.Repositories.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography;
@@ -238,6 +239,37 @@ namespace API.BanhTrungThu.Controllers
             return Ok(response);
         }
 
+        [HttpGet]
+        [Route("don-hang-theo-khach-hang/{id}")]
+        public async Task<IActionResult> GetDonHangByKhachHang(string id)
+        {
+            var donHangs = await _donHangRepositories.GetDonHangByKhachHang(id);
+            var response = new List<DonHangDto>();
+            foreach (var donHang in donHangs)
+            {
+                var chiTietDonHangs = await _donHangRepositories.GetChiTietDonHangByMaDonHang(donHang.MaDonHang);
+                response.Add(new DonHangDto
+                {
+                    MaDonHang = donHang.MaDonHang,
+                    MaKhachHang = donHang.MaKhachHang,
+                    ThoiGianDatHang = donHang.ThoiGianDatHang,
+                    TongTien = donHang.TongTien,
+                    ThongTinThanhToan = donHang.ThongTinThanhToan,
+                    DiaChiGiaoHang = donHang.DiaChiGiaoHang,
+                    TinhTrang = donHang.TinhTrang,
+                    ChiTietDonHang = chiTietDonHangs.Select(chiTiet => new ChiTietDonHangDto
+                    {
+                        MaChiTiet = chiTiet.MaChiTiet,
+                        MaDonHang = chiTiet.MaDonHang,
+                        MaSanPham = chiTiet.MaSanPham,
+                        SoLuong = chiTiet.SoLuong,
+                        Gia = chiTiet.Gia,
+                        TenSanPham = chiTiet.SanPham.TenSanPham
+                    }).ToList()
+                });
+            }
+            return Ok(response);
+        }
     }
 }
 

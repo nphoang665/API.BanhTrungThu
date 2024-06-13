@@ -513,6 +513,7 @@ namespace API.BanhTrungThu.Controllers
             htmlContent = htmlContent.Replace("{{SoDienThoai}}", responseKhachHang.SoDienThoai);
             htmlContent = htmlContent.Replace("{{Email}}", responseKhachHang.Email);
             htmlContent = htmlContent.Replace("{{DiaChi}}", responseKhachHang.DiaChi);
+            htmlContent = htmlContent.Replace("{{TrangThai}}", responseThanhToan.TinhTrang);
 
             // Lấy chi tiết đơn hàng
             var chiTietDonHangs = await _chiTietDonHangRepositories.GetAllAsync();

@@ -30,6 +30,11 @@ namespace API.BanhTrungThu.Repositories.Implementation
             return await _db.ChiTietDonHang.Include(x => x.DonHang).Include(x => x.SanPham).ToListAsync();
         }
 
+        public async Task<IEnumerable<ChiTietDonHang>> GetChiTietDonHangByDonHangId(string maDonHang)
+        {
+            return await _db.ChiTietDonHang.Where(ct => ct.MaDonHang == maDonHang).ToListAsync();
+        }
+
         public async Task<IEnumerable<ChiTietDonHang?>> GetDonHangById(string id)
         {
             return await _db.ChiTietDonHang.Where(s => s.MaChiTiet == id).Include(x => x.DonHang).ToListAsync();

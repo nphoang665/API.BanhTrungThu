@@ -2,6 +2,7 @@
 using API.BanhTrungThu.Models.DTO;
 using API.BanhTrungThu.Repositories.Implementation;
 using API.BanhTrungThu.Repositories.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,6 +22,7 @@ namespace API.BanhTrungThu.Controllers
         }
 
         [HttpPost]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateSanPham([FromBody] CreateSanPhamRequestDto request)
         {
             Random random = new Random();
@@ -145,6 +147,7 @@ namespace API.BanhTrungThu.Controllers
         }
         [HttpPut]
         [Route("{id}")]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateSanPham(string id, UpdateSanPhamRequestDto request)
         {
             var sanPham = new SanPham
@@ -241,6 +244,7 @@ namespace API.BanhTrungThu.Controllers
 
         [HttpDelete]
         [Route("{id}")]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteLoaiSanPham([FromRoute] string id)
         {
             var sanPham = await _sanPhamRepositories.DeleteAsync(id);

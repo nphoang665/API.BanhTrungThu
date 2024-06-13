@@ -12,7 +12,8 @@ namespace API.BanhTrungThu.Repositories.Interface
         Task<SanPham> GetSanPhamById(string id);
         Task UpdateSanPhamAsync(SanPham sanPham); 
         Task<IEnumerable<DonHang>> GetDonHangByKhachHang(string maKhachHang);
-        Task<IEnumerable<DonHang>> GetLichSuMuaHangByKhachHang(string maKhachHang); // Thêm dòng này
-        Task<IEnumerable<ChiTietDonHang>> GetChiTietDonHangByMaDonHang(string maDonHang); // Thêm dòng này
+        Task<IEnumerable<DonHang>> GetLichSuMuaHangByKhachHang(string maKhachHang); 
+        Task<IEnumerable<ChiTietDonHang>> GetChiTietDonHangByMaDonHang(string maDonHang); 
+        
     }
 }
