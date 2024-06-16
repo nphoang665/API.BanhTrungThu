@@ -32,6 +32,7 @@ builder.Services.AddScoped<IKhachHangRepositories, KhachHangRepositories>();
 builder.Services.AddScoped<IDonHangRepositories, DonHangRepositories>();
 builder.Services.AddScoped<IChiTietDonHangRepositories, ChiTietDonHangRepositories>();
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();
+builder.Services.AddScoped<IDanhGiaRepository, DanhGiaRepository>();
 
 builder.Services.AddIdentityCore<IdentityUser>()
     .AddRoles<IdentityRole>()
