@@ -28,14 +28,27 @@ namespace API.BanhTrungThu.Repositories.Implementation
             {
                 return null;
             }
+            var hasProducts = await _db.SanPham.AnyAsync(x => x.MaLoai == id);
+            if (hasProducts)
+            {
+                // Trả về null hoặc một thông báo lỗi khác để báo rằng loại sản phẩm không thể xóa
+                return null;
+            }
+
             _db.LoaiSanPham.Remove(existingLoaiSanPham);
             await _db.SaveChangesAsync();
-            return existingLoaiSanPham;
+            return existingLoaiSanPham;  
         }
+
 
         public async Task<IEnumerable<LoaiSanPham>> GetAllAsync()
         {
             return await _db.LoaiSanPham.ToListAsync();
+        }
+
+        public async Task<LoaiSanPham> GetByIdAsync(string id)
+        {
+            return await _db.LoaiSanPham.FindAsync(id);
         }
 
         public async Task<LoaiSanPham?> GetLoaiSanPhamById(string id)

@@ -231,16 +231,22 @@ namespace API.BanhTrungThu.Controllers
         [HttpGet("Loai/{maLoai}")]
         public async Task<ActionResult<IEnumerable<SanPham>>> GetSanPhamByLoaiAsync(string maLoai)
         {
+            //var sanPhams = await _sanPhamRepositories.GetSanPhamByLoaiAsync(maLoai);
+            //if (sanPhams == null)
+            //{
+            //    return NotFound();
+            //}
+            //var firstSanPhams = sanPhams.GroupBy(sp => sp.MaLoai).Select(group => group.First());
+            //return Ok(sanPhams);
             var sanPhams = await _sanPhamRepositories.GetSanPhamByLoaiAsync(maLoai);
             if (sanPhams == null)
             {
                 return NotFound();
             }
-            // Lọc chỉ lấy sản phẩm đầu tiên của mỗi loại sản phẩm
-            var firstSanPhams = sanPhams.GroupBy(sp => sp.MaLoai).Select(group => group.First());
             return Ok(sanPhams);
 
         }
+
 
         [HttpDelete]
         [Route("{id}")]
@@ -270,6 +276,31 @@ namespace API.BanhTrungThu.Controllers
         public async Task<IActionResult> GetSanPhamNoiBat()
         {
             var sanPhams = await _sanPhamRepositories.GetSanPhamNoiBatAsync();
+
+            var response = new List<SanPhamDto>();
+            foreach (var sanPham in sanPhams)
+            {
+                var anhSanPham = await _anhSanPhamRepositories.GetAnhSanPhamById(sanPham.MaSanPham);
+                response.Add(new SanPhamDto
+                {
+                    MaSanPham = sanPham.MaSanPham,
+                    MaLoai = sanPham.MaLoai,
+                    TenSanPham = sanPham.TenSanPham,
+                    Gia = sanPham.Gia,
+                    MoTa = sanPham.MoTa,
+                    SoLuongTrongKho = sanPham.SoLuongTrongKho,
+                    NgayThem = sanPham.NgayThem,
+                    TinhTrang = sanPham.TinhTrang,
+                    AnhSanPham = anhSanPham,
+                });
+            }
+            return Ok(response);
+        }
+
+        [HttpGet("banchaynhat/{maLoai}")]
+        public async Task<IActionResult> GetSanPhamBanChayByLoai(string maLoai)
+        {
+            var sanPhams = await _sanPhamRepositories.GetSanPhamBanChayByLoaiAsync(maLoai);
 
             var response = new List<SanPhamDto>();
             foreach (var sanPham in sanPhams)

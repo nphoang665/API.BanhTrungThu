@@ -9,6 +9,6 @@ namespace API.BanhTrungThu.Repositories.Interface
         Task<LoaiSanPham?> UpdateAsync(LoaiSanPham loaiSanPham);
         Task<LoaiSanPham?> DeleteAsync(string id);
         Task<LoaiSanPham?> GetLoaiSanPhamById(string id);
-
+        Task<LoaiSanPham> GetByIdAsync(string id);
     }
 }

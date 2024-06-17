@@ -113,20 +113,17 @@ namespace API.BanhTrungThu.Controllers
         [Route("{id}")]
         public async Task<IActionResult> UpdateLoaiSanPham([FromRoute] string id, UpdateLoaiSanPhamRequestDto request)
         {
-            var loaiSanPham = new LoaiSanPham
-            {
-                MaLoai = id,
-                TenLoai = request.TenLoai,
-                AnhLoai = request.AnhLoai
-            };
-            loaiSanPham = await _loaiSanPhamRepositories.UpdateAsync(loaiSanPham);
-
-            if (loaiSanPham == null)
+            // Tìm sản phẩm hiện tại trong cơ sở dữ liệu
+            var existingLoaiSanPham = await _loaiSanPhamRepositories.GetByIdAsync(id);
+            if (existingLoaiSanPham == null)
             {
                 return NotFound();
             }
 
-            if (!string.IsNullOrEmpty(request.AnhLoai))
+            // Cập nhật thông tin loại sản phẩm
+            existingLoaiSanPham.TenLoai = request.TenLoai;
+
+            if (!string.IsNullOrEmpty(request.AnhLoai) && request.AnhLoai.Contains("base64"))
             {
                 string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "Images");
                 if (!Directory.Exists(folderPath))
@@ -155,17 +152,44 @@ namespace API.BanhTrungThu.Controllers
                 System.IO.File.WriteAllBytes(filePath, imageBytes);
 
                 // Cập nhật tên file vào đối tượng loaiSanPham và lưu lại vào cơ sở dữ liệu
-                loaiSanPham.AnhLoai = fileName;
-                await _loaiSanPhamRepositories.UpdateAsync(loaiSanPham);
+                existingLoaiSanPham.AnhLoai = fileName;
             }
+            else if (string.IsNullOrEmpty(request.AnhLoai))
+            {
+                // Nếu không có ảnh mới và ảnh cũ đã tồn tại, giữ nguyên ảnh cũ
+                existingLoaiSanPham.AnhLoai = existingLoaiSanPham.AnhLoai;
+            }
+
+            await _loaiSanPhamRepositories.UpdateAsync(existingLoaiSanPham);
+
             var response = new LoaiSanPhamDto
             {
-                MaLoai = loaiSanPham.MaLoai,
-                TenLoai = loaiSanPham.TenLoai,
-                AnhLoai = loaiSanPham.AnhLoai
+                MaLoai = existingLoaiSanPham.MaLoai,
+                TenLoai = existingLoaiSanPham.TenLoai,
+                AnhLoai = existingLoaiSanPham.AnhLoai
             };
+
             return Ok(response);
         }
+
+
+        //[HttpDelete]
+        //[Route("{id}")]
+        //public async Task<IActionResult> DeleteLoaiSanPham([FromRoute] string id)
+        //{
+        //    var loaiSanPham = await _loaiSanPhamRepositories.DeleteAsync(id);
+        //    if (loaiSanPham == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    var response = new LoaiSanPhamDto
+        //    {
+        //        MaLoai = loaiSanPham.MaLoai,
+        //        TenLoai = loaiSanPham.TenLoai,
+        //        AnhLoai = loaiSanPham.AnhLoai
+        //    };
+        //    return Ok(response);
+        //}
 
         [HttpDelete]
         [Route("{id}")]
@@ -174,7 +198,7 @@ namespace API.BanhTrungThu.Controllers
             var loaiSanPham = await _loaiSanPhamRepositories.DeleteAsync(id);
             if (loaiSanPham == null)
             {
-                return NotFound();
+                return BadRequest("Loại sản phẩm này còn sản phẩm không thể xóa");
             }
             var response = new LoaiSanPhamDto
             {

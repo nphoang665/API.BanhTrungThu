@@ -124,5 +124,26 @@ namespace API.BanhTrungThu.Controllers
             return Ok(response);
         }
 
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<IActionResult> DeleteKhachHang([FromRoute] string id)
+        {
+            var khachHang = await _khachHangRepositories.DeleteAsync(id);
+            if (khachHang == null)
+            {
+                return NotFound();
+            }
+            var response = new KhachHangDto
+            {
+                MaKhachHang = khachHang.MaKhachHang,
+                TenKhachHang = khachHang.TenKhachHang,
+                SoDienThoai = khachHang.SoDienThoai,
+                Email = khachHang.Email,
+                DiaChi = khachHang.DiaChi,
+                TinhTrang = khachHang.TinhTrang,
+                NgayDangKy = khachHang.NgayDangKy,
+            };
+            return Ok(response);
+        }
     }
 }

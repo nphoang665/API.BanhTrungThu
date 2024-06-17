@@ -23,14 +23,15 @@ namespace API.BanhTrungThu.Repositories.Implementation
         public async Task<KhachHang?> DeleteAsync(string id)
         {
             var existingKhachHang = await _db.KhachHang.FirstOrDefaultAsync(x => x.MaKhachHang == id);
-
-            if (existingKhachHang is null)
+            existingKhachHang.TinhTrang = "Ngưng hoạt động";
+            if (existingKhachHang != null)
             {
-                return null;
+                _db.KhachHang.Update(existingKhachHang);
+                await _db.SaveChangesAsync();
+                return existingKhachHang;
             }
-            _db.KhachHang.Remove(existingKhachHang);
-            await _db.SaveChangesAsync();
-            return existingKhachHang;
+           
+            return null;
         }
 
         public async Task<IEnumerable<KhachHang>> GetAllAsync()
