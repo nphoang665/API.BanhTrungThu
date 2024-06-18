@@ -33,7 +33,7 @@ namespace API.BanhTrungThu.Controllers
             {
                 MaDonHang = maDonHang,
                 MaKhachHang = request.MaKhachHang,
-                ThoiGianDatHang = request.ThoiGianDatHang,
+                ThoiGianDatHang = DateTime.Now,
                 TongTien = request.TongTien,
                 ThongTinThanhToan = request.ThongTinThanhToan,
                 DiaChiGiaoHang = request.DiaChiGiaoHang,
@@ -120,14 +120,14 @@ namespace API.BanhTrungThu.Controllers
                     donHang.TinhTrang = "Đã thanh toán";
                     await _donHangRepositories.UpdateAsync(donHang);
                     // Chuyển hướng người dùng về trang chủ
-                    return Redirect("http://localhost:4200/home");
+                    return Ok(new { status = "success", message = "Thanh toán thành công!", maDonHang = txnRef });
                 }
                 else
                 {
                     donHang.TinhTrang = "Thanh toán thất bại";
                     await _donHangRepositories.UpdateAsync(donHang);
                     // Chuyển hướng người dùng về trang thông báo lỗi
-                    return Redirect("/payment-error");
+                    return Ok(new { status = "failed", message = "Thanh toán thất bại!", maDonHang = txnRef });
                 }
             }
             return BadRequest("Invalid signature");
