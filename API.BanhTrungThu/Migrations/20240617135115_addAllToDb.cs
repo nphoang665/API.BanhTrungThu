@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace API.BanhTrungThu.Migrations
 {
     /// <inheritdoc />
-    public partial class AddAllToDb : Migration
+    public partial class addAllToDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -163,6 +163,11 @@ namespace API.BanhTrungThu.Migrations
                         principalColumn: "MaSanPham",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.InsertData(
+                table: "KhachHang",
+                columns: new[] { "MaKhachHang", "DiaChi", "Email", "NgayDangKy", "SoDienThoai", "TenKhachHang", "TinhTrang" },
+                values: new object[] { "KH0001", "Buôn Ma Thuột, ĐakLak", "admin@gmail.com", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "0123123123", "ADMIN", "Đang hoạt động" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AnhSanPham_MaSanPham",

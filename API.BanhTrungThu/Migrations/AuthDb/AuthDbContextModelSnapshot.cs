@@ -159,15 +159,15 @@ namespace API.BanhTrungThu.Migrations.AuthDb
                         {
                             Id = "4106353f-cbc4-4192-8d34-6d9bcf98802f",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "d42900ce-a179-40d8-a690-ffbdcfee75d2",
+                            ConcurrencyStamp = "18aa4b67-4a0b-49a5-b1dc-c7c39ce58cda",
                             Email = "admin@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEDZd6+7AgdoLP+vD2yAFE0Xbakbz1s/5sEdv4TYqOZxXyvXoVbHRLCbSmvz0UFQdjA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEP2kpj0SAjiGzLEpvNGgdrMPqL7q2MLvkUC9pXnAJMaon0uML5OYYSSLtYxu42Jprw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "ea6810c0-6fef-43e8-8be3-a1bcbf0ff417",
+                            SecurityStamp = "83247aee-0a05-4b74-bc66-93104761b172",
                             TwoFactorEnabled = false,
                             UserName = "admin@gmail.com"
                         },
@@ -175,15 +175,15 @@ namespace API.BanhTrungThu.Migrations.AuthDb
                         {
                             Id = "90b2ba0b-c552-44f6-bf4d-cc46fa5731b5",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "3daf621c-b3d2-453f-8f99-1c9498f67222",
+                            ConcurrencyStamp = "51f84f83-8e92-49e2-a428-251dbf7967c0",
                             Email = "khachhang@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "KHACHHANG@GMAIL.COM",
                             NormalizedUserName = "KHACHHANG@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEEyMcxv/HBj2jZofNoqNsKRyGK+fhMGZJrfPqwBuctQt64B0SDnTb+POuXOTkMobJQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEEPZjhVwMaTS57svTuDtszvd4Dn1JTf+vq5JsV/quPcB0/CLmIQE/5TaddOML8B9yw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "38b9422a-e53c-4a91-a602-09f2e930e870",
+                            SecurityStamp = "2a7eda7b-99cf-4ca6-808d-9c51d1c00ab2",
                             TwoFactorEnabled = false,
                             UserName = "Khách hàng"
                         });

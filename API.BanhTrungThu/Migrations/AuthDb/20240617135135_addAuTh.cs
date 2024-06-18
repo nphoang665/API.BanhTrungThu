@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace API.BanhTrungThu.Migrations.AuthDb
 {
     /// <inheritdoc />
-    public partial class Taomigrationauth : Migration
+    public partial class addAuTh : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -172,8 +172,8 @@ namespace API.BanhTrungThu.Migrations.AuthDb
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "4106353f-cbc4-4192-8d34-6d9bcf98802f", 0, "d42900ce-a179-40d8-a690-ffbdcfee75d2", "admin@gmail.com", false, false, null, "ADMIN@GMAIL.COM", "ADMIN@GMAIL.COM", "AQAAAAIAAYagAAAAEDZd6+7AgdoLP+vD2yAFE0Xbakbz1s/5sEdv4TYqOZxXyvXoVbHRLCbSmvz0UFQdjA==", null, false, "ea6810c0-6fef-43e8-8be3-a1bcbf0ff417", false, "admin@gmail.com" },
-                    { "90b2ba0b-c552-44f6-bf4d-cc46fa5731b5", 0, "3daf621c-b3d2-453f-8f99-1c9498f67222", "khachhang@gmail.com", false, false, null, "KHACHHANG@GMAIL.COM", "KHACHHANG@GMAIL.COM", "AQAAAAIAAYagAAAAEEyMcxv/HBj2jZofNoqNsKRyGK+fhMGZJrfPqwBuctQt64B0SDnTb+POuXOTkMobJQ==", null, false, "38b9422a-e53c-4a91-a602-09f2e930e870", false, "Khách hàng" }
+                    { "4106353f-cbc4-4192-8d34-6d9bcf98802f", 0, "18aa4b67-4a0b-49a5-b1dc-c7c39ce58cda", "admin@gmail.com", false, false, null, "ADMIN@GMAIL.COM", "ADMIN@GMAIL.COM", "AQAAAAIAAYagAAAAEP2kpj0SAjiGzLEpvNGgdrMPqL7q2MLvkUC9pXnAJMaon0uML5OYYSSLtYxu42Jprw==", null, false, "83247aee-0a05-4b74-bc66-93104761b172", false, "admin@gmail.com" },
+                    { "90b2ba0b-c552-44f6-bf4d-cc46fa5731b5", 0, "51f84f83-8e92-49e2-a428-251dbf7967c0", "khachhang@gmail.com", false, false, null, "KHACHHANG@GMAIL.COM", "KHACHHANG@GMAIL.COM", "AQAAAAIAAYagAAAAEEPZjhVwMaTS57svTuDtszvd4Dn1JTf+vq5JsV/quPcB0/CLmIQE/5TaddOML8B9yw==", null, false, "2a7eda7b-99cf-4ca6-808d-9c51d1c00ab2", false, "Khách hàng" }
                 });
 
             migrationBuilder.InsertData(

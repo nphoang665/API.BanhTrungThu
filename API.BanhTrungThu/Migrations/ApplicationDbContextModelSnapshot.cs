@@ -191,6 +191,18 @@ namespace API.BanhTrungThu.Migrations
                     b.HasKey("MaKhachHang");
 
                     b.ToTable("KhachHang");
+
+                    b.HasData(
+                        new
+                        {
+                            MaKhachHang = "KH0001",
+                            DiaChi = "Buôn Ma Thuột, ĐakLak",
+                            Email = "admin@gmail.com",
+                            NgayDangKy = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SoDienThoai = "0123123123",
+                            TenKhachHang = "ADMIN",
+                            TinhTrang = "Đang hoạt động"
+                        });
                 });
 
             modelBuilder.Entity("API.BanhTrungThu.Models.Domain.LoaiSanPham", b =>
@@ -268,7 +280,7 @@ namespace API.BanhTrungThu.Migrations
             modelBuilder.Entity("API.BanhTrungThu.Models.Domain.ChiTietDonHang", b =>
                 {
                     b.HasOne("API.BanhTrungThu.Models.Domain.DonHang", "DonHang")
-                        .WithMany()
+                        .WithMany("ChiTietDonHang")
                         .HasForeignKey("MaDonHang")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -323,6 +335,11 @@ namespace API.BanhTrungThu.Migrations
                         .IsRequired();
 
                     b.Navigation("LoaiSanPham");
+                });
+
+            modelBuilder.Entity("API.BanhTrungThu.Models.Domain.DonHang", b =>
+                {
+                    b.Navigation("ChiTietDonHang");
                 });
 #pragma warning restore 612, 618
         }
