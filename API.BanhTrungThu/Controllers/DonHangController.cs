@@ -270,6 +270,22 @@ namespace API.BanhTrungThu.Controllers
             }
             return Ok(response);
         }
+        [HttpGet, Route("ExportDonHang")]
+        public IActionResult ExportDonHang()
+        {
+            var fileContents = _donHangRepositories.ExportDonHangToExcel();
+
+            if (fileContents == null || fileContents.Length == 0)
+            {
+                return NotFound();
+            }
+
+            return File(
+                fileContents: fileContents,
+                contentType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                fileDownloadName: "DonHang.xlsx"
+            );
+        }
     }
 }
 

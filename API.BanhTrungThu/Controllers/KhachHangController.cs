@@ -145,5 +145,22 @@ namespace API.BanhTrungThu.Controllers
             };
             return Ok(response);
         }
+
+        [HttpGet, Route("ExportKhachHang")]
+        public IActionResult ExportKhachHang()
+        {
+            var fileContents = _khachHangRepositories.ExportKhachHangToExcel();
+
+            if (fileContents == null || fileContents.Length == 0)
+            {
+                return NotFound();
+            }
+
+            return File(
+                fileContents: fileContents,
+                contentType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                fileDownloadName: "KhachHang.xlsx"
+            );
+        }
     }
 }

@@ -321,5 +321,22 @@ namespace API.BanhTrungThu.Controllers
             }
             return Ok(response);
         }
+
+        [HttpGet, Route("ExportSanPham")]
+        public IActionResult ExportSanPham()
+        {
+            var fileContents = _sanPhamRepositories.ExportSanPhamToExcel();
+
+            if (fileContents == null || fileContents.Length == 0)
+            {
+                return NotFound();
+            }
+
+            return File(
+                fileContents: fileContents,
+                contentType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                fileDownloadName: "SanPham.xlsx"
+            );
+        }
     }
 }

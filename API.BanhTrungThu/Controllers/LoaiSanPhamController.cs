@@ -208,5 +208,21 @@ namespace API.BanhTrungThu.Controllers
             };
             return Ok(response);
         }
+        [HttpGet, Route("ExportLoaiSanPham")]
+        public IActionResult ExportLoaiSanPham()
+        {
+            var fileContents = _loaiSanPhamRepositories.ExportLoaiSanPhamToExcel();
+
+            if (fileContents == null || fileContents.Length == 0)
+            {
+                return NotFound();
+            }
+
+            return File(
+                fileContents: fileContents,
+                contentType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                fileDownloadName: "LoaiSanPham.xlsx"
+            );
+        }
     }
 }

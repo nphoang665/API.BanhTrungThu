@@ -10,5 +10,6 @@ namespace API.BanhTrungThu.Repositories.Interface
         Task<LoaiSanPham?> DeleteAsync(string id);
         Task<LoaiSanPham?> GetLoaiSanPhamById(string id);
         Task<LoaiSanPham> GetByIdAsync(string id);
+        byte[] ExportLoaiSanPhamToExcel();
     }
 }

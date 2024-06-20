@@ -2,6 +2,7 @@
 using API.BanhTrungThu.Models.Domain;
 using API.BanhTrungThu.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml;
 
 namespace API.BanhTrungThu.Repositories.Implementation
 {
@@ -102,6 +103,44 @@ namespace API.BanhTrungThu.Repositories.Implementation
 
             await _db.SaveChangesAsync();
             return sanPham;
+        }
+        public byte[] ExportSanPhamToExcel()
+        {
+            var SanPhams = _db.SanPham.ToList();
+            if (SanPhams == null) return [];
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+            using (var package = new ExcelPackage())
+            {
+                var worksheet = package.Workbook.Worksheets.Add("SanPham");
+                // Add header
+                worksheet.Cells[1, 1].Value = "Mã sản phẩm";
+                worksheet.Cells[1, 2].Value = "Mã loại";
+                worksheet.Cells[1, 3].Value = "Tên sản phẩm";
+                worksheet.Cells[1, 4].Value = "Giá";
+                worksheet.Cells[1, 5].Value = "Mô tả";
+                worksheet.Cells[1, 6].Value = "Số lượng trong kho";
+                worksheet.Cells[1, 7].Value = "Ngày thêm";
+                worksheet.Cells[1, 8].Value = "Tình trạng";          
+
+                // Add data
+                for (int i = 0; i < SanPhams.Count; i++)
+                {
+                    worksheet.Cells[i + 2, 1].Value = SanPhams[i].MaSanPham;
+                    worksheet.Cells[i + 2, 2].Value = SanPhams[i].MaLoai;
+                    worksheet.Cells[i + 2, 3].Value = SanPhams[i].TenSanPham;
+                    worksheet.Cells[i + 2, 4].Value = SanPhams[i].Gia;
+                    worksheet.Cells[i + 2, 5].Value = SanPhams[i].MoTa;
+                    worksheet.Cells[i + 2, 6].Value = SanPhams[i].SoLuongTrongKho;
+                    worksheet.Cells[i + 2, 7].Value = SanPhams[i].NgayThem;
+                    worksheet.Cells[i + 2, 7].Style.Numberformat.Format = "dd/MM/yyyy hh:mm:ss";
+                    worksheet.Cells[i + 2, 8].Value = SanPhams[i].TinhTrang;
+                }
+                worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
+
+                return package.GetAsByteArray();
+            }
+
         }
     }
 }

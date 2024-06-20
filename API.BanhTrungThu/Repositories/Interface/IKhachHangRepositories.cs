@@ -9,5 +9,6 @@ namespace API.BanhTrungThu.Repositories.Interface
         Task<KhachHang?> UpdateAsync(KhachHang khachHang);
         Task<KhachHang?> DeleteAsync(string id);
         Task<KhachHang?> GetKhachHangById(string id);
+        byte[] ExportKhachHangToExcel();
     }
 }

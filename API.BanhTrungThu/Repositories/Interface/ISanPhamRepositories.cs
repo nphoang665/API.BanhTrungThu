@@ -12,5 +12,6 @@ namespace API.BanhTrungThu.Repositories.Interface
         Task<IEnumerable<SanPham>> GetSanPhamByLoaiAsync(string maLoai);
         Task<IEnumerable<SanPham>> GetSanPhamNoiBatAsync();
         Task<IEnumerable<SanPham>> GetSanPhamBanChayByLoaiAsync(string maLoai);
+        byte[] ExportSanPhamToExcel();
     }
 }

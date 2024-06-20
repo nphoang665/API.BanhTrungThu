@@ -2,6 +2,7 @@
 using API.BanhTrungThu.Models.Domain;
 using API.BanhTrungThu.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml;
 
 namespace API.BanhTrungThu.Repositories.Implementation
 {
@@ -88,6 +89,42 @@ namespace API.BanhTrungThu.Repositories.Implementation
         {
             _db.SanPham.Update(sanPham);
             await _db.SaveChangesAsync();
+        }
+        public byte[] ExportDonHangToExcel()
+        {
+            var DonHangs = _db.DonHang.ToList();
+            if (DonHangs == null) return [];
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+            using (var package = new ExcelPackage())
+            {
+                var worksheet = package.Workbook.Worksheets.Add("DonHang");
+                // Add header
+                worksheet.Cells[1, 1].Value = "Mã đơn hàng";
+                worksheet.Cells[1, 2].Value = "Mã khách hàng";
+                worksheet.Cells[1, 3].Value = "Thời gian đặt hàng";
+                worksheet.Cells[1, 4].Value = "Tổng tiền";
+                worksheet.Cells[1, 5].Value = "Địa chỉ giao hàng";
+                worksheet.Cells[1, 6].Value = "Thông tin thanh toán";
+                worksheet.Cells[1, 7].Value = "Tình trạng";
+
+                // Add data
+                for (int i = 0; i < DonHangs.Count; i++)
+                {
+                    worksheet.Cells[i + 2, 1].Value = DonHangs[i].MaDonHang;
+                    worksheet.Cells[i + 2, 2].Value = DonHangs[i].MaKhachHang;
+                    worksheet.Cells[i + 2, 3].Value = DonHangs[i].ThoiGianDatHang;
+                    worksheet.Cells[i + 2, 3].Style.Numberformat.Format = "dd/MM/yyyy hh:mm:ss";
+                    worksheet.Cells[i + 2, 4].Value = DonHangs[i].TongTien;
+                    worksheet.Cells[i + 2, 5].Value = DonHangs[i].DiaChiGiaoHang;
+                    worksheet.Cells[i + 2, 6].Value = DonHangs[i].ThongTinThanhToan;
+                    worksheet.Cells[i + 2, 7].Value = DonHangs[i].TinhTrang;
+                }
+                worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
+
+                return package.GetAsByteArray();
+            }
+
         }
     }
 }

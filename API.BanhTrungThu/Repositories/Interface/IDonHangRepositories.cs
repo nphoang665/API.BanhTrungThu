@@ -13,7 +13,9 @@ namespace API.BanhTrungThu.Repositories.Interface
         Task UpdateSanPhamAsync(SanPham sanPham); 
         Task<IEnumerable<DonHang>> GetDonHangByKhachHang(string maKhachHang);
         Task<IEnumerable<DonHang>> GetLichSuMuaHangByKhachHang(string maKhachHang); 
-        Task<IEnumerable<ChiTietDonHang>> GetChiTietDonHangByMaDonHang(string maDonHang); 
-        
+        Task<IEnumerable<ChiTietDonHang>> GetChiTietDonHangByMaDonHang(string maDonHang);
+        byte[] ExportDonHangToExcel();
+
+
     }
 }

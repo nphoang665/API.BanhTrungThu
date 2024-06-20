@@ -2,6 +2,7 @@
 using API.BanhTrungThu.Models.Domain;
 using API.BanhTrungThu.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml;
 
 namespace API.BanhTrungThu.Repositories.Implementation
 {
@@ -54,6 +55,43 @@ namespace API.BanhTrungThu.Repositories.Implementation
                 return khachHang;
             }
             return null;
+        }
+
+        public byte[] ExportKhachHangToExcel()
+        {
+            var KhachHangs = _db.KhachHang.ToList();
+            if (KhachHangs == null) return [];
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+            using (var package = new ExcelPackage())
+            {
+                var worksheet = package.Workbook.Worksheets.Add("KhachHang");
+                // Add header
+                worksheet.Cells[1, 1].Value = "Mã khách hàng";
+                worksheet.Cells[1, 2].Value = "Tên khách hàng";
+                worksheet.Cells[1, 3].Value = "Số Điện Thoại";
+                worksheet.Cells[1, 4].Value = "Email";
+                worksheet.Cells[1, 5].Value = "Địa Chỉ";
+                worksheet.Cells[1, 6].Value = "Tình trạng";
+                worksheet.Cells[1, 7].Value = "Ngày đăng ký";
+
+                // Add data
+                for (int i = 0; i < KhachHangs.Count; i++)
+                {
+                    worksheet.Cells[i + 2, 1].Value = KhachHangs[i].MaKhachHang;
+                    worksheet.Cells[i + 2, 2].Value = KhachHangs[i].TenKhachHang;
+                    worksheet.Cells[i + 2, 3].Value = KhachHangs[i].SoDienThoai;
+                    worksheet.Cells[i + 2, 4].Value = KhachHangs[i].Email;
+                    worksheet.Cells[i + 2, 5].Value = KhachHangs[i].DiaChi;
+                    worksheet.Cells[i + 2, 6].Value = KhachHangs[i].TinhTrang;
+                    worksheet.Cells[i + 2, 7].Value = KhachHangs[i].NgayDangKy;
+                    worksheet.Cells[i + 2, 7].Style.Numberformat.Format = "dd/MM/yyyy hh:mm:ss";
+                }
+                worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
+
+                return package.GetAsByteArray();
+            }
+
         }
     }
 }
