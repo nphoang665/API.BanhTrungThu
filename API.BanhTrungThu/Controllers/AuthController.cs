@@ -42,6 +42,70 @@ namespace API.BanhTrungThu.Controllers
             _sanPhamRepositories = sanPhamRepositories;
         }
 
+        //[HttpPost]
+        //[Route("login")]
+        //public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
+        //{
+        //    var identityUser = await userManager.FindByEmailAsync(request.Email);
+
+        //    if (identityUser is not null)
+        //    {
+        //        var checkPasswordResult = await userManager.CheckPasswordAsync(identityUser, request.Password);
+
+        //        if (checkPasswordResult)
+        //        {
+        //            var roles = await userManager.GetRolesAsync(identityUser);
+
+        //            var jwtToken = tokenReponsitory.CreateJwtToken(identityUser, roles.ToList());
+
+
+        //            // code lấy full data khách hàng
+        //            var khachHangs = await _khachHangRepositories.GetAllAsync();
+        //            var responseKhachHang = new List<KhachHangDto>();
+        //            foreach (var khachHang in khachHangs)
+        //            {
+        //                responseKhachHang.Add(new KhachHangDto
+        //                {
+        //                    MaKhachHang = khachHang.MaKhachHang,
+        //                    TenKhachHang = khachHang.TenKhachHang,
+        //                    SoDienThoai = khachHang.SoDienThoai,
+        //                    DiaChi = khachHang.DiaChi,
+        //                    Email = khachHang.Email,
+        //                    TinhTrang = khachHang.TinhTrang,
+        //                    NgayDangKy = khachHang.NgayDangKy
+        //                });
+        //            }
+        //            //so sánh email kiểm tra xem tk này có trong khách hàng không
+        //            var existKhachHang = responseKhachHang.FirstOrDefault(s => s.Email == request.Email);
+        //            if (existKhachHang != null)
+        //            {
+        //                var response = new LoginResponseDto
+        //                {
+        //                    KhachHang = existKhachHang,
+        //                    Email = request.Email, // email đã check đúng với mật khẩu đã đúng
+        //                    Roles = roles.ToList(),
+        //                    Token = jwtToken
+        //                };
+        //                return Ok(response);
+        //            }
+
+
+        //        }
+        //        else
+        //        {
+        //            // Mật khẩu không đúng
+        //            ModelState.AddModelError("", "Mật khẩu không đúng");
+        //        }
+        //    }
+        //    else
+        //    {
+        //        // Tài khoản không tồn tại
+        //        ModelState.AddModelError("", "Tài khoản không tồn tại");
+        //    }
+
+        //    return ValidationProblem(ModelState);
+        //}
+
         [HttpPost]
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
@@ -75,34 +139,29 @@ namespace API.BanhTrungThu.Controllers
                             NgayDangKy = khachHang.NgayDangKy
                         });
                     }
-                    //so sánh email kiểm tra xem tk này có trong khách hàng không
+                    //so sánh email 
                     var existKhachHang = responseKhachHang.FirstOrDefault(s => s.Email == request.Email);
                     if (existKhachHang != null)
                     {
                         var response = new LoginResponseDto
                         {
                             KhachHang = existKhachHang,
-                            Email = request.Email, // email đã check đúng với mật khẩu đã đúng
+                            Email = request.Email,
                             Roles = roles.ToList(),
                             Token = jwtToken
                         };
                         return Ok(response);
                     }
-
-
                 }
                 else
                 {
-                    // Mật khẩu không đúng
-                    ModelState.AddModelError("", "Mật khẩu không đúng");
+                    return BadRequest(new { error = "Mật khẩu không đúng" });
                 }
             }
             else
             {
-                // Tài khoản không tồn tại
-                ModelState.AddModelError("", "Tài khoản không tồn tại");
+                return BadRequest(new { error = "Tài khoản không tồn tại" });
             }
-
             return ValidationProblem(ModelState);
         }
 
@@ -443,7 +502,7 @@ namespace API.BanhTrungThu.Controllers
             string logoUrl = "https://i.imgur.com/2VUOkoU.png";
 
             // Đọc nội dung từ file HTML
-            string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "Template/index.html");
+            string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "Template/hoaDon.html");
 
             string htmlFilePath = folderPath; // Đường dẫn tới file HTML của bạn
             string htmlContent = System.IO.File.ReadAllText(htmlFilePath);

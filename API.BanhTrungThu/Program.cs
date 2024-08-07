@@ -86,6 +86,12 @@ app.UseCors(options =>
 });
 app.UseAuthentication();
 app.UseAuthorization();
+var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "Images");
+if (!Directory.Exists(uploadsPath))
+{
+    Directory.CreateDirectory(uploadsPath);
+}
+
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Images")),
